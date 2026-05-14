@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grand Line del saber — Aventura de aprendizaje</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Pirata+One&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;1,9..40,400&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="grand-line">
+  <div class="sea-sky" aria-hidden="true"></div>
+  <div class="clouds" aria-hidden="true">
+    <span class="cloud c1"></span>
+    <span class="cloud c2"></span>
+    <span class="cloud c3"></span>
+  </div>
+  <div class="waves-bottom wave-a" aria-hidden="true"></div>
+  <div class="waves-bottom wave-b" aria-hidden="true"></div>
+
+  <div id="fx-root" class="fx-root" aria-hidden="true"></div>
+  <div id="toast-strip" class="toast-strip" aria-live="polite"></div>
+
+  <div id="app-shake" class="app-shake">
+    <div class="app">
+      <header class="hero">
+        <div class="hero-deco" aria-hidden="true">
+          <span class="compass" title="Brújula"></span>
+          <span class="rope rope-l"></span>
+          <span class="rope rope-r"></span>
+        </div>
+        <p class="eyebrow">Aventura interactiva · sin verdadero/falso</p>
+        <h1 class="title-pirate">Grand Line del saber</h1>
+        <p class="subtitle">
+          Cada <strong>isla</strong> es una etapa: eliges <strong>una ruta</strong> entre tres caminos.
+          Tu tripulación interior — <strong>educación</strong>, <strong>desarrollo</strong> y
+          <strong>crecimiento</strong> — gana experiencia como si fuera una
+          <span class="berry">recompensa en beris del conocimiento</span>.
+        </p>
+      </header>
+
+      <div class="hud-bar">
+        <div class="hud-left">
+          <span id="combo-display" class="combo-pill">Combo ×1</span>
+          <span id="streak-flash" class="streak-flash hidden" aria-hidden="true">¡Racha!</span>
+        </div>
+        <div id="loot-row" class="loot-row" title="Cofres por etapa superada"></div>
+        <button id="duel-btn" type="button" class="duel-btn" title="Minijuego extra">
+          Duelo relámpago
+        </button>
+      </div>
+
+      <nav class="trail-wrap" aria-label="Islas en la ruta">
+        <p class="trail-title">Ruta del Grand Line</p>
+        <ol id="trail" class="trail"></ol>
+      </nav>
+
+      <section class="stats" aria-live="polite">
+        <div class="stat">
+          <span class="stat-label">Educación</span>
+          <div class="bar"><div id="bar-edu" class="bar-fill bar-edu"></div></div>
+          <span id="val-edu" class="stat-value"><span class="berry-sym" aria-hidden="true">B</span><span id="val-edu-num">50</span></span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Desarrollo</span>
+          <div class="bar"><div id="bar-dev" class="bar-fill bar-dev"></div></div>
+          <span id="val-dev" class="stat-value"><span class="berry-sym" aria-hidden="true">B</span><span id="val-dev-num">50</span></span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Crecimiento</span>
+          <div class="bar"><div id="bar-gro" class="bar-fill bar-gro"></div></div>
+          <span id="val-gro" class="stat-value"><span class="berry-sym" aria-hidden="true">B</span><span id="val-gro-num">50</span></span>
+        </div>
+      </section>
+
+      <main class="journey-panel wanted-frame">
+        <p id="round" class="round">Etapa 1 de 8</p>
+        <h2 id="situation" class="situation">Cargando…</h2>
+        <p id="prompt" class="prompt" hidden></p>
+        <div id="choices" class="forks" role="group" aria-label="Rumbos posibles"></div>
+      </main>
+
+      <footer class="footer">
+        <p id="message" class="message"></p>
+        <button id="restart" type="button" class="btn btn-ghost hidden">Zarpar de nuevo</button>
+      </footer>
+    </div>
+  </div>
+
+  <div id="minigame" class="minigame-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="mini-title">
+    <div class="minigame-card">
+      <h3 id="mini-title" class="mini-title">¡Asalto al cofre del saber!</h3>
+      <p class="mini-desc">Toca el cofre todo lo que puedas. Cañonazos de motivación incluidos.</p>
+      <button type="button" id="chest-hit" class="chest-hit" aria-label="Golpear cofre">
+        <span class="chest-lid"></span>
+        <span class="chest-body"></span>
+        <span class="chest-glow"></span>
+      </button>
+      <div class="mini-meter-wrap">
+        <div id="mini-meter" class="mini-meter"></div>
+      </div>
+      <p class="mini-stats"><span id="mini-score">0</span> golpes · Meta: 12</p>
+      <button type="button" id="mini-skip" class="mini-skip">Saltar bonus</button>
+    </div>
+  </div>
+
+  <div id="duel-overlay" class="minigame-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="duel-title">
+    <div class="minigame-card duel-card">
+      <h3 id="duel-title" class="mini-title">Duelo relámpago</h3>
+      <p class="mini-desc">Cuando veas <strong class="duel-go">¡YA!</strong>, toca el botón rojo. Tres aciertos seguidos = +5 a todo.</p>
+      <p id="duel-status" class="duel-status">Preparado…</p>
+      <button type="button" id="duel-hit" class="duel-hit" disabled>¡Fuego!</button>
+      <p id="duel-score" class="mini-stats">Aciertos: 0 / 3</p>
+      <button type="button" id="duel-close" class="mini-skip">Cerrar</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
